@@ -4,7 +4,7 @@
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no"/>
-    <title>WIN10-UI-DEMO</title>
+    <title>桌面系统</title>
     <link rel='Shortcut Icon' type='image/x-icon' href='./img/windows.ico'>
     <script type="text/javascript" src="./js/jquery-2.2.4.min.js"></script>
     <link href="./css/animate.css" rel="stylesheet">
@@ -25,12 +25,15 @@
     </style>
     <script>
         Win10.onReady(function () {
-
-            //设置壁纸
-            Win10.setBgUrl({
-                main:'./img/wallpapers/main.jpg',
-                mobile:'./img/wallpapers/mobile.jpg',
-            });
+        	 Win10.enableFullScreen();
+			$.post('/todayImgae',{},function(ret){
+				//设置壁纸
+	            Win10.setBgUrl({
+	                main:ret,//'./img/wallpapers/WorldWaterDay.jpg',
+	                mobile:'./img/wallpapers/mobile.jpg',
+	            });
+			});
+            
 
             Win10.setAnimated([
                 'animated flip',
@@ -50,22 +53,6 @@
 
         //该函数可删除 Orz
         function win10_forgive_me() {
-            Win10.enableFullScreen();
-            layer.alert('点击展示下一版本特性', {}, function(index){
-                var blue=$('<img src="./img/presentation/bluescreen.jpg" style="position: fixed;width: 100%;height:100%;top:0;z-index:9999999999" />');
-                setTimeout(function () {
-                    $('body').append(blue);
-                },3000);
-                setTimeout(function () {
-                    blue.remove();
-                    Win10.disableFullScreen();
-                    setTimeout(function () {
-                        layer.msg('开个玩笑，别打我');
-
-                    },1000);
-                },7000);
-                layer.close(index);
-            });
 
         }
     </script>
@@ -139,11 +126,11 @@
         <div class="blocks">
             <div class="menu_group">
                 <div class="title">
-                    应用示例
+                   	 应用示例
                 </div>
                 <div loc="1,1" size="6,3" class="block">
                     <div class="content red detail" >
-                        <iframe style="margin-top: 10px" frameborder="no" border="0" marginwidth="0" marginheight="0" width=264 height=110 src="//music.163.com/outchain/player?type=2&id=110771&auto=0&height=90"></iframe>
+                       	想听歌吗
                     </div>
                     <div class="content red cover">
                         <img width="264" style="position: relative;top: -50px;" src="./img/presentation/wangyiyun.gif" />
