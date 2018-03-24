@@ -25,8 +25,9 @@
     </style>
     <script>
         Win10.onReady(function () {
-        	 Win10.enableFullScreen();
-			$.post('/todayImgae',{},function(ret){
+        	var d = new Date();
+        	var date = ""+d.getFullYear()+d.getMonth()+d.getDate();
+			$.post('/todayImgae',{date:date},function(ret){
 				//设置壁纸
 	            Win10.setBgUrl({
 	                main:ret,//'./img/wallpapers/WorldWaterDay.jpg',
@@ -121,7 +122,7 @@
                 shadeClose:true,
                 content: '<img width=\'300\' src=\'./img/presentation/donation.jpg\' />'
             })"><i class="green icon fa fa-thumbs-up fa-fw"></i>捐赠</div>
-            <div class="item" onclick=" Win10.exit();"><i class="black icon fa fa-power-off fa-fw"></i>关闭</div>
+            <div class="item" onclick=" Win10.exit();"><i class="black icon fa fa-power-off fa-fw"></i>退出</div>
         </div>
         <div class="blocks">
             <div class="menu_group">

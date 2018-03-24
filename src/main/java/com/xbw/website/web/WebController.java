@@ -46,6 +46,16 @@ public class WebController {
 		}
 		return "/login";
 	}
+	
+	@RequestMapping("/logout")
+	public String logout(HttpServletRequest req) {
+		HttpSession session = req.getSession();
+		 if(session.getAttribute("user")!=null){
+			 session.removeAttribute("user");
+		 }
+		 log.info("退出系统");
+		return "/login";
+	}
 
 	@RequestMapping("/redirectUrl")
 	public String redirectUrl(HttpServletRequest req) {
@@ -68,13 +78,13 @@ public class WebController {
 		return ret;
 	}
 
-	@Cacheable(value = "todayImgae")
+	@Cacheable(value = "todayImgae",key="#date")
 	@RequestMapping("/todayImgae")
 	@ResponseBody
-	public String todayImgae() {
+	public String todayImgae(String date) {
 		String host = "http://cn.bing.com";
-		log.info("执行请求");
-		String url = host+"/HPImageArchive.aspx?format=js&idx=0&n=1&nc=1521726697743&pid=hp&video=1&quiz=1&fav=1";
+		log.info("执行请求"+date);
+		String url = host+"/HPImageArchive.aspx?format=js&idx=0&n=1";
 		JSONObject json = restTemplate.getForEntity(url, JSONObject.class).getBody();
 		String str = json.getJSONArray("images").getJSONObject(0).getString("url");
 		return host+str;

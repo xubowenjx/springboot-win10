@@ -982,6 +982,7 @@ window.Win10 = {
 			title : Win10.lang('提示', 'Prompt')
 		}, function(index) {
 			document.body.onbeforeunload = function() {
+				$.post('/logout',{},function(){});
 			};
 			window.location.href = "about:blank";
 			window.close();
