@@ -399,10 +399,10 @@ body {
 #win10_command_center {
     position: fixed;
     right: 0;
-    bottom: 41px;
+    bottom: 40px;
     width: 350px;
     background-color: rgba(19,23,28,0.81);
-    height: calc(100% - 42px);
+    height: calc(100% - 40px);
     transition: all 0.5s;
     overflow-x: hidden;
     overflow-y: auto;

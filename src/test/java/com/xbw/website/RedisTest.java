@@ -10,7 +10,6 @@ import org.springframework.test.context.junit4.SpringRunner;
 import com.xbw.website.utils.RedisService;
 
 
-
 @RunWith(SpringRunner.class)
 @SpringBootTest
  public class RedisTest {

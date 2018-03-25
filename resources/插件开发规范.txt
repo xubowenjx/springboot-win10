@@ -1,0 +1,32 @@
+为了保持主版本更新的兼容性，我们推荐将第三方改动打包为插件的形式。
+
+在v1.1.2.3之后，Win10.onReady函数支持多次调用了。也就是说，你可以在各自的js文件中使用onReady，就像在jquery中多次使用$(..).click(fuction..)一样。
+
+所以一个合理的插件功能扩展框架应该类似于：
+
+<html>
+
+...
+
+引入 win10.js
+引入 插件A.js
+引入 插件B.js
+引入 其他文件
+
+具体增加的功能，在插件A.js和插件B.js中使用Win10.onReady添加。
+
+例如增加一个sayHello的功能
+
+Win10.onReady(function(){
+   Win10.sayHello=function(alert(''Hello!));
+   Win10.sayHello();
+})
+
+期待各位分享各类炫酷的插件！
+
+
+
+
+
+尤里2号
+2017/9/18
