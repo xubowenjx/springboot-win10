@@ -1,16 +1,19 @@
 package com.xbw.website.web;
 
 import java.util.HashMap;
+import java.util.Locale;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.Cacheable;
+import org.springframework.context.MessageSource;
+import org.springframework.context.i18n.LocaleContext;
+import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -26,9 +29,14 @@ public class WebController {
 	private Logger log = LoggerFactory.getLogger(WebController.class);
 	@Autowired
 	private RestTemplate restTemplate;
+	@Autowired
+	private MessageSource messageSource;
 
 	@RequestMapping("/")
 	public String index(HttpServletRequest req) {
+		Locale locale = LocaleContextHolder.getLocale();
+		String query = messageSource.getMessage("public.btn.query", null, locale);
+		log.info("query:"+query);
 		HttpSession session = req.getSession(true);
 		String user = (String) session.getAttribute("user");
 		if (user == null) {
@@ -46,14 +54,14 @@ public class WebController {
 		}
 		return "/login";
 	}
-	
+
 	@RequestMapping("/logout")
 	public String logout(HttpServletRequest req) {
 		HttpSession session = req.getSession();
-		 if(session.getAttribute("user")!=null){
-			 session.removeAttribute("user");
-		 }
-		 log.info("退出系统");
+		if (session.getAttribute("user") != null) {
+			session.removeAttribute("user");
+		}
+		log.info("退出系统");
 		return "/login";
 	}
 
@@ -78,15 +86,15 @@ public class WebController {
 		return ret;
 	}
 
-	@Cacheable(value = "todayImgae",key="#date")
+	@Cacheable(value = "todayImgae", key = "#date")
 	@RequestMapping("/todayImgae")
 	@ResponseBody
 	public String todayImgae(String date) {
 		String host = "http://cn.bing.com";
-		log.info("执行请求"+date);
-		String url = host+"/HPImageArchive.aspx?format=js&idx=0&n=1";
+		log.info("执行请求" + date);
+		String url = host + "/HPImageArchive.aspx?format=js&idx=0&n=1";
 		JSONObject json = restTemplate.getForEntity(url, JSONObject.class).getBody();
 		String str = json.getJSONArray("images").getJSONObject(0).getString("url");
-		return host+str;
+		return host + str;
 	}
 }

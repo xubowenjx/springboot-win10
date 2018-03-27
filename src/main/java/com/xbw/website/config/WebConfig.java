@@ -9,6 +9,7 @@ import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.data.redis.serializer.Jackson2JsonRedisSerializer;
 import org.springframework.data.redis.serializer.RedisSerializer;
 import org.springframework.http.converter.HttpMessageConverter;
+import org.springframework.web.servlet.LocaleResolver;
 
 import com.alibaba.fastjson.serializer.SerializerFeature;
 import com.alibaba.fastjson.support.config.FastJsonConfig;
@@ -51,5 +52,9 @@ public class WebConfig {
 
 		template.afterPropertiesSet();
 		return template;
+	}
+	@Bean
+	public LocaleResolver localeResolver() {
+		return new I18nResolver();
 	}
 }
