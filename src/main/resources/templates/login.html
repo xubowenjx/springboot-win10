@@ -54,6 +54,7 @@ input {
 	padding: 0 1em;
 	border-radius: 5px;
 	margin-bottom: 11px;
+	outline: none;
 }
 
 .login-username, .login-password {
@@ -92,25 +93,33 @@ input {
 	opacity: .9;
 	filter: alpha(opacity = 90);
 }
+.languase{
+	display: inline-block;
+	position: absolute;
+	right: 0;
+	color:red;
+}
 </style>
 </head>
 <body>
 	<div id="win10-login">
-		<div style="height: 10%; min-height: 120px"></div>
+		<div style="height: 10%; min-height: 120px">
+			<span id="changLange" class="languase" th:text="${#httpServletRequest.getAttribute('show')}" th:targetLang="${#httpServletRequest.getAttribute('lang')}"></span>
+		</div>
 		<div id="win10-login-box">
 			<div class="win10-login-box-square">
 				<img src="./img/avatar.jpg" class="content" />
 			</div>
-			<p style="font-size: 24px; color: white; text-align: center">游客</p>
+			<p style="font-size: 24px; color: white; text-align: center"></p>
 			<form target="_self" method="get">
 				<!--用户名-->
-				<input type="text" placeholder="请输入登录名" class="login-username"
+				<input type="text" th:placeholder="#{public.tip.inputname}" class="login-username"
 					name="name" id="name">
 				<!--密码-->
 				<input type="password" placeholder="请输入密码" class="login-password"
 					name="password" id="password">
 				<!--登陆按钮-->
-				<input type="button" value="登录" id="btn-login" class="login-submit" />
+				<input type="button" th:value="#{public.btn.login}" id="btn-login" class="login-submit" />
 			</form>
 		</div>
 	</div>
@@ -145,6 +154,13 @@ input {
 				console.log("DONE");
 				
 			}
+		})
+	});
+	$('#changLange').on('click',function(){
+		var lang =  $('#changLange').attr('targetLang');
+		$.get('/changlang',{lang:lang},function(res){
+			console.log(res);
+			location.reload(true);
 		})
 	});
 </script>

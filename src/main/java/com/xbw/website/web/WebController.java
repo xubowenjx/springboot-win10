@@ -12,11 +12,11 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.context.MessageSource;
-import org.springframework.context.i18n.LocaleContext;
 import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.client.RestTemplate;
 
@@ -49,8 +49,18 @@ public class WebController {
 	public String login(HttpServletRequest req) {
 		HttpSession session = req.getSession(true);
 		String user = (String) session.getAttribute("user");
+		String i18n =  session.getAttribute("i18n").toString();
+		String show ="English";
+		if(i18n.equals("en_US")){
+			show = "中文";
+			i18n = "zh_CN";
+		}else{
+			i18n = "en_US";
+		}
+		req.setAttribute("lang", i18n);
+		req.setAttribute("show", show);
 		if (user != null) {
-			return "/index";
+			return "redirect:/";
 		}
 		return "/login";
 	}
@@ -63,6 +73,28 @@ public class WebController {
 		}
 		log.info("退出系统");
 		return "/login";
+	}
+	/**
+	 * @Title: changeLang
+	 * @Description: 切换语言
+	 * @Author: xubowen              
+	 * @Create Date: 2018年3月29日 下午9:44:46
+	 * @History: 2018年3月29日 下午9:44:46 xubowen Created.
+	 *
+	 * @param lang
+	 * @return
+	 *
+	 */
+	@RequestMapping("/changlang")
+	@ResponseBody
+	public String changeLang(HttpServletRequest req){
+		 String lang = req.getParameter("lang");
+		String[] strs = lang.split("_");
+		Locale locale = new Locale(strs[0], strs[1]);
+		LocaleContextHolder.setLocale(locale);
+		HttpSession session = req.getSession();
+		session.setAttribute("i18n", locale);
+		return lang;
 	}
 
 	@RequestMapping("/redirectUrl")

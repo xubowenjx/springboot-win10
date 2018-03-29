@@ -345,7 +345,9 @@ body {
 }
 
 #win10-menu .menu_group .block:hover  {
-    border: 2px solid white;
+   transform: scale(1);
+    transition: 0.3s;
+    outline: rgba(29, 29, 29, 0.1) solid 4px;
 }
 
 #win10 #win10-shortcuts {
