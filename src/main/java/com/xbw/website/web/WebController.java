@@ -106,7 +106,7 @@ public class WebController {
 	@ResponseBody
 	public Map<String, String> auth(@RequestBody UserBo u, HttpServletRequest req) {
 		Map<String, String> ret = new HashMap();
-		if ("xbw".equals(u.getName()) && "1".equals(u.getPassword())) {
+		if ("xbw".equals(u.getUserName()) && "1".equals(u.getUserPassword())) {
 			ret.put("code", "1");
 			ret.put("msg", "登录成功！");
 		} else {
