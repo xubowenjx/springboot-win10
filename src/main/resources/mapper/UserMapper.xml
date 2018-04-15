@@ -10,7 +10,15 @@
 		<result column="gmt_modify_date" property="gmtModifyDate" />
 	</resultMap>
 	<select id="getUserList" parameterType="com.xbw.website.bo.UserBo" resultMap="BaseResultMap">
-		SELECT * FROM s_user 
+		SELECT * FROM s_user u 
+		<where>
+			<if test="userName!=null">
+				and u.user_name = #{userName}
+			</if>
+			<if test="userPassword!=null">
+				and u.password = #{userPassword}
+			</if>
+		</where>
 	</select>
 	<insert id="save" parameterType="com.xbw.website.bo.UserBo" >
 		insert into s_user(user_name,password,user_type,gmt_create_date,gmt_modify_date) select #{userName},#{userPassword},#{userType},NOW() ,NOW()

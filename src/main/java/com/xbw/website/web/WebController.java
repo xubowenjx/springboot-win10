@@ -1,6 +1,7 @@
 package com.xbw.website.web;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 
@@ -13,15 +14,17 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.context.MessageSource;
 import org.springframework.context.i18n.LocaleContextHolder;
+import org.springframework.http.HttpMethod;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.client.RestTemplate;
 
 import com.alibaba.fastjson.JSONObject;
 import com.xbw.website.bo.UserBo;
+import com.xbw.website.business.service.UserService;
 
 @Controller
 @RequestMapping("/")
@@ -31,14 +34,15 @@ public class WebController {
 	private RestTemplate restTemplate;
 	@Autowired
 	private MessageSource messageSource;
+	@Autowired
+	private UserService userService;
 
 	@RequestMapping("/")
 	public String index(HttpServletRequest req) {
 		Locale locale = LocaleContextHolder.getLocale();
 		String query = messageSource.getMessage("public.btn.query", null, locale);
-		log.info("query:"+query);
-		HttpSession session = req.getSession(true);
-		String user = (String) session.getAttribute("user");
+		log.info("query:" + query);
+		UserBo user = getCurrentUser(req);
 		if (user == null) {
 			return "redirect:/login";
 		}
@@ -48,13 +52,13 @@ public class WebController {
 	@RequestMapping("/login")
 	public String login(HttpServletRequest req) {
 		HttpSession session = req.getSession(true);
-		String user = (String) session.getAttribute("user");
-		String i18n =  session.getAttribute("i18n").toString();
-		String show ="English";
-		if(i18n.equals("en_US")){
+		UserBo user = getCurrentUser(req);
+		String i18n = session.getAttribute("i18n").toString();
+		String show = "English";
+		if (i18n.equals("en_US")) {
 			show = "中文";
 			i18n = "zh_CN";
-		}else{
+		} else {
 			i18n = "en_US";
 		}
 		req.setAttribute("lang", i18n);
@@ -74,10 +78,11 @@ public class WebController {
 		log.info("退出系统");
 		return "/login";
 	}
+
 	/**
 	 * @Title: changeLang
 	 * @Description: 切换语言
-	 * @Author: xubowen              
+	 * @Author: xubowen
 	 * @Create Date: 2018年3月29日 下午9:44:46
 	 * @History: 2018年3月29日 下午9:44:46 xubowen Created.
 	 *
@@ -87,8 +92,8 @@ public class WebController {
 	 */
 	@RequestMapping("/changlang")
 	@ResponseBody
-	public String changeLang(HttpServletRequest req){
-		 String lang = req.getParameter("lang");
+	public String changeLang(HttpServletRequest req) {
+		String lang = req.getParameter("lang");
 		String[] strs = lang.split("_");
 		Locale locale = new Locale(strs[0], strs[1]);
 		LocaleContextHolder.setLocale(locale);
@@ -102,18 +107,19 @@ public class WebController {
 		return "redirect:/";
 	}
 
-	@RequestMapping("/auth")
+	@RequestMapping(value="/auth",method={RequestMethod.POST})
 	@ResponseBody
 	public Map<String, String> auth(@RequestBody UserBo u, HttpServletRequest req) {
 		Map<String, String> ret = new HashMap();
-		if ("xbw".equals(u.getUserName()) && "1".equals(u.getUserPassword())) {
+		List<UserBo> user = userService.getUserList(u);
+		if (!user.isEmpty()) {
 			ret.put("code", "1");
 			ret.put("msg", "登录成功！");
 		} else {
 			ret.put("code", "0");
 			ret.put("msg", "用户名或密码错误！");
 		}
-		req.getSession().setAttribute("user", "xbw");
+		req.getSession().setAttribute("user", u);
 
 		return ret;
 	}
@@ -128,5 +134,12 @@ public class WebController {
 		JSONObject json = restTemplate.getForEntity(url, JSONObject.class).getBody();
 		String str = json.getJSONArray("images").getJSONObject(0).getString("url");
 		return host + str;
+	}
+
+	private UserBo getCurrentUser(HttpServletRequest req) {
+		HttpSession session = req.getSession();
+		Object O =session.getAttribute("user");
+		UserBo user = (UserBo) O;
+		return user;
 	}
 }

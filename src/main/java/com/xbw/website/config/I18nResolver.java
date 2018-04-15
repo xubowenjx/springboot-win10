@@ -30,6 +30,7 @@ public class I18nResolver implements LocaleResolver {
 	 */
 	@Override
 	public Locale resolveLocale(HttpServletRequest req) {
+		 
 		Locale local = null;
 		String lang = req.getParameter(LANG);
 		if (!StringUtils.isEmpty(lang)) {
@@ -42,7 +43,7 @@ public class I18nResolver implements LocaleResolver {
 		HttpSession session = req.getSession(true);
 		if (local != null) {//有参数做
 			// 放入session
-			session.setAttribute(LANG_KEY, local);
+			 
 		} else {//没有就取
 			Locale localSession = (Locale) session.getAttribute(LANG_KEY);
 			if (localSession != null) {
@@ -51,13 +52,13 @@ public class I18nResolver implements LocaleResolver {
 				local = Locale.getDefault();
 			}
 		}
-
+		session.setAttribute(LANG_KEY, local);
 		return local;
 	}
 
 	@Override
 	public void setLocale(HttpServletRequest req, HttpServletResponse resp, Locale locale) {
-
+		 
 	}
 
 }
