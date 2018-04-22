@@ -32,6 +32,8 @@ public class MyFilter implements Filter {
         HttpServletResponse response=(HttpServletResponse)resp;  
         HttpSession session=request.getSession();  
         String url=request.getRequestURI();  
+        String contextPath = request.getContextPath();
+        url = url.substring(contextPath.length());
         boolean flag=false;  
         for(int i=0;i<reqUrls.length;i++){  
             url=url.toLowerCase();  
@@ -50,7 +52,7 @@ public class MyFilter implements Filter {
             if(userName!=null){  
             	  chain.doFilter(req, resp);//已经登录的请求放行  
             }else{  
-                response.sendRedirect("/login");  
+                response.sendRedirect(contextPath+"/login");  
             }  
         }  
 

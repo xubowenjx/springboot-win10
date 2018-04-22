@@ -8,7 +8,7 @@ $('#btn-login').on('click', function() {
 		$.ajax({
 			type : "POST",
 			contentType : "application/json",
-			url : "/auth",
+			url : "./auth",
 			data : JSON.stringify(data),
 			dataType : 'json',
 			timeout : 600000,
@@ -17,7 +17,9 @@ $('#btn-login').on('click', function() {
 				 layer.msg(data.msg);
 				 layer.close(lid);
 				 if(code==='1'){
-					location.href='/redirectUrl';
+					location.href='./redirectUrl';
+				 }else{
+					 layer.msg(data.msg);
 				 }
 			
 			},

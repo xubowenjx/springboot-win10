@@ -38,11 +38,11 @@ public class WebController {
 	private UserService userService;
 
 	@RequestMapping("/")
-	public String index(HttpServletRequest req) {
+	public String index(HttpServletRequest request) {
 		Locale locale = LocaleContextHolder.getLocale();
 		String query = messageSource.getMessage("public.btn.query", null, locale);
 		log.info("query:" + query);
-		UserBo user = getCurrentUser(req);
+		UserBo user = getCurrentUser(request);
 		if (user == null) {
 			return "redirect:/login";
 		}
@@ -53,7 +53,11 @@ public class WebController {
 	public String login(HttpServletRequest req) {
 		HttpSession session = req.getSession(true);
 		UserBo user = getCurrentUser(req);
-		String i18n = session.getAttribute("i18n").toString();
+		Object i18n = session.getAttribute("i18n");
+		//int i = 1/0;
+		if(i18n==null){
+			i18n = "zh_CN";
+		}
 		String show = "English";
 		if (i18n.equals("en_US")) {
 			show = "中文";
@@ -120,7 +124,6 @@ public class WebController {
 			ret.put("msg", "用户名或密码错误！");
 		}
 		req.getSession().setAttribute("user", u);
-
 		return ret;
 	}
 

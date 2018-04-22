@@ -30,7 +30,7 @@ public class MybatisTest {
 		bo.setUserName("w33");
 		bo.setUserPassword("123");
 		bo.setUserType("1");
-		userService.save(bo);
+		//userService.save(bo);
 		List<UserBo> users = userService.getUserList(bo);
 		System.out.println(users);
 	}

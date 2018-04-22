@@ -6,7 +6,6 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.data.redis.connection.RedisConnectionFactory;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.core.StringRedisTemplate;
-import org.springframework.data.redis.serializer.Jackson2JsonRedisSerializer;
 import org.springframework.data.redis.serializer.RedisSerializer;
 import org.springframework.http.converter.HttpMessageConverter;
 import org.springframework.web.servlet.LocaleResolver;
@@ -14,8 +13,6 @@ import org.springframework.web.servlet.LocaleResolver;
 import com.alibaba.fastjson.serializer.SerializerFeature;
 import com.alibaba.fastjson.support.config.FastJsonConfig;
 import com.alibaba.fastjson.support.spring.FastJsonHttpMessageConverter;
-import com.fasterxml.jackson.annotation.PropertyAccessor;
-import com.fasterxml.jackson.databind.ObjectMapper;
 
 @Configuration
 public class WebConfig {
@@ -47,9 +44,7 @@ public class WebConfig {
 	public RedisTemplate<String, String> redisTemplate(RedisConnectionFactory factory,
 			RedisSerializer fastJson2JsonRedisSerializer) {
 		StringRedisTemplate template = new StringRedisTemplate(factory);
-
 		template.setValueSerializer(fastJson2JsonRedisSerializer);
-
 		template.afterPropertiesSet();
 		return template;
 	}

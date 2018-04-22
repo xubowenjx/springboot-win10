@@ -670,7 +670,7 @@ window.Win10 = {
 	menuOpen : function() {
 		$("#win10-menu").addClass('opened');
 		$("#win10-menu").removeClass('hidden');
-		this._hideShortcut();
+		//this._hideShortcut();
 		$(".win10-open-iframe").addClass('hide');
 	},
 	menuToggle : function() {
@@ -687,7 +687,7 @@ window.Win10 = {
 	},
 	commandCenterOpen : function() {
 		$("#win10_command_center").removeClass('hidden_right');
-		this._hideShortcut();
+		//this._hideShortcut();
 		$(".win10-open-iframe").addClass('hide');
 		$("#win10-msg-nof").removeClass('on-new-msg fa-commenting-o');
 	},

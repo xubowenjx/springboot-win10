@@ -27,7 +27,7 @@
         Win10.onReady(function () {
         	var d = new Date();
         	var date = ""+d.getFullYear()+d.getMonth()+d.getDate();
-			$.post('/todayImgae',{date:date},function(ret){
+			$.post('./todayImgae',{date:date},function(ret){
 				//设置壁纸
 	            Win10.setBgUrl({
 	                main:ret,//'./img/wallpapers/WorldWaterDay.jpg',
